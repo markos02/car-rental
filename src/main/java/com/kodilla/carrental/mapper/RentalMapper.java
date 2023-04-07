@@ -45,4 +45,10 @@ public class RentalMapper {
                 rental.getStatus()
         );
     }
+
+    public List<RentalDto> mapToRentalDtoList(List<Rental> rentalList) {
+        return rentalList.stream()
+                .map(this::mapToRentalDto)
+                .collect(Collectors.toList());
+    }
 }

@@ -68,6 +68,7 @@ public class RentalRepositoryTestSuite {
         Rental rental = new Rental();
         rental.setStatus(RentalStatus.ORDERED);
         Order order = new Order();
+        order.setRental(rental);
         rental.setOrder(order);
 
         //When
@@ -92,9 +93,17 @@ public class RentalRepositoryTestSuite {
         rental.setStatus(RentalStatus.ORDERED);
         Order order = new Order();
         rental.setOrder(order);
-        rental.getDamages().add(new Damage());
-        rental.getDamages().add(new Damage());
-        rental.getDamages().add(new Damage());
+
+        Damage damage1 = new Damage();
+        damage1.setRental(rental);
+        Damage damage2 = new Damage();
+        damage2.setRental(rental);
+        Damage damage3 = new Damage();
+        damage3.setRental(rental);
+
+        rental.getDamages().add(damage1);
+        rental.getDamages().add(damage2);
+        rental.getDamages().add(damage3);
 
         //When
         rentalRepository.save(rental);

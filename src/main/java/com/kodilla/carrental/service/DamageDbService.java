@@ -18,6 +18,10 @@ public class DamageDbService {
         return damageRepository.findDamagesByCar_CarId(carId);
     }
 
+    public List<Damage> getRentalDamages(Integer rentalId) {
+        return damageRepository.findDamagesByRental_RentalId(rentalId);
+    }
+
     public Damage saveDamage(Damage damage) {
         return damageRepository.save(damage);
     }
