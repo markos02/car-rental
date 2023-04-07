@@ -60,4 +60,12 @@ public class CarDbService {
 
         return availableCars;
     }
+
+    public void deleteCar(Integer carId) throws CarNotFoundException {
+        if (carRepository.existsById(carId)) {
+            carRepository.deleteById(carId);
+        } else {
+            throw new CarNotFoundException();
+        }
+    }
 }

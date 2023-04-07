@@ -22,4 +22,19 @@ public class GlobalHttpErrorHandler {
     public ResponseEntity<Object> handleCarNotFoundException (CarNotFoundException  exception) {
         return new ResponseEntity<>("Car with given id doesn't exist", HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(RentalNotFoundException.class)
+    public ResponseEntity<Object> handleRentalNotFoundException (RentalNotFoundException  exception) {
+        return new ResponseEntity<>("Rental with given id doesn't exist", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ClientNotFoundException.class)
+    public ResponseEntity<Object> handleClientNotFoundException (ClientNotFoundException  exception) {
+        return new ResponseEntity<>("Client with given id doesn't exist", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<Object> handleOrderNotFoundException (OrderNotFoundException  exception) {
+        return new ResponseEntity<>("Order with given id doesn't exist", HttpStatus.NOT_FOUND);
+    }
 }

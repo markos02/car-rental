@@ -11,4 +11,6 @@ public interface DamageRepository extends CrudRepository<Damage, Integer> {
 
     @Override
     List<Damage> findAll();
+
+    List<Damage> findDamagesByCar_CarId(Integer carId);
 }

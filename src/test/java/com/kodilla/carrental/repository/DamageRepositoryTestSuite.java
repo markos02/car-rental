@@ -3,11 +3,14 @@ package com.kodilla.carrental.repository;
 import com.kodilla.carrental.domain.Car;
 import com.kodilla.carrental.domain.Damage;
 import com.kodilla.carrental.domain.Rental;
+import com.kodilla.carrental.domain.enums.FuelType;
+import com.kodilla.carrental.domain.enums.Transmission;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,8 +92,8 @@ public class DamageRepositoryTestSuite {
         assertNotNull(readCar);
 
         //CleanUp
-        //damageRepository.deleteById(id);
-        //carRepository.deleteById(carId);
+        damageRepository.deleteById(id);
+        carRepository.deleteById(carId);
     }
 
     @Test
@@ -119,5 +122,44 @@ public class DamageRepositoryTestSuite {
         //CleanUp
         damageRepository.deleteById(id);
         rentalRepository.deleteById(rentalId);
+    }
+
+    @Test
+    void testFindDamagesByCar() {
+        //Given
+        String description = "Description of test damage";
+        Car car1 = new Car("ABC 1234", FuelType.GASOLINE, Transmission.AUTOMATIC, "Test model 1");
+        Car car2 = new Car("ABC 5678", FuelType.GASOLINE, Transmission.MANUAL, "Test model 2");
+
+        Damage damage1 = new Damage();
+        damage1.setDescription(description + " 1");
+        damage1.setCar(car1);
+
+        Damage damage2 = new Damage();
+        damage2.setDescription(description + " 2");
+        damage2.setCar(car1);
+
+        car1.getDamages().add(damage1);
+        car1.getDamages().add(damage2);
+
+        //When
+        carRepository.save(car1);
+        carRepository.save(car2);
+        Integer carId1 = car1.getCarId();
+        Integer carId2 = car2.getCarId();
+
+        damageRepository.save(damage1);
+        damageRepository.save(damage2);
+
+        List<Damage> damageList1 = damageRepository.findDamagesByCar_CarId(carId1);
+        List<Damage> damageList2 = damageRepository.findDamagesByCar_CarId(carId2);
+
+        //Then
+        assertEquals(2,damageList1.size());
+        assertEquals(0,damageList2.size());
+
+        //CleanUp
+        carRepository.deleteById(carId1);
+        carRepository.deleteById(carId2);
     }
 }

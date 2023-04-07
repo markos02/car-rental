@@ -1,16 +1,18 @@
 package com.kodilla.carrental.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "DAMAGES")
 public class Damage {
 
@@ -19,7 +21,7 @@ public class Damage {
     @NotNull
     @Column(name = "DAMAGE_ID", unique = true)
     private Integer damageId;
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name ="CAR_ID")
