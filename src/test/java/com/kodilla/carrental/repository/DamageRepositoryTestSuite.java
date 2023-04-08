@@ -162,4 +162,61 @@ public class DamageRepositoryTestSuite {
         carRepository.deleteById(carId1);
         carRepository.deleteById(carId2);
     }
+
+    @Test
+    @Transactional
+    void testFindDamagesByRental() {
+        //Given
+        String description = "Description of test damage";
+        Car car1 = new Car("ABC 1234", FuelType.GASOLINE, Transmission.AUTOMATIC, "Test model 1");
+        Car car2 = new Car("ABC 5678", FuelType.GASOLINE, Transmission.MANUAL, "Test model 2");
+
+        Damage damage1 = new Damage();
+        damage1.setDescription(description + " 1");
+        damage1.setCar(car1);
+
+        Damage damage2 = new Damage();
+        damage2.setDescription(description + " 2");
+        damage2.setCar(car1);
+
+        car1.getDamages().add(damage1);
+        car1.getDamages().add(damage2);
+
+        Rental rental1 = new Rental();
+        Rental rental2 = new Rental();
+
+        rental1.getDamages().add(damage1);
+        rental1.getDamages().add(damage2);
+        damage1.setRental(rental1);
+        damage2.setRental(rental1);
+
+        //When
+        carRepository.save(car1);
+        carRepository.save(car2);
+        Integer carId1 = car1.getCarId();
+        Integer carId2 = car2.getCarId();
+
+        damageRepository.save(damage1);
+        damageRepository.save(damage2);
+
+        rentalRepository.save(rental1);
+        rentalRepository.save(rental2);
+        Integer rentalId1 = rental1.getRentalId();
+        Integer rentalId2 = rental2.getRentalId();
+
+        List<Damage> damageList1 = damageRepository.findDamagesByRental_RentalId(rentalId1);
+        List<Damage> damageList2 = damageRepository.findDamagesByRental_RentalId(rentalId2);
+
+        //Then
+        assertNotNull(damageList1);
+        assertNotNull(damageList2);
+        assertEquals(2,damageList1.size());
+        assertEquals(0,damageList2.size());
+
+        //CleanUp
+        carRepository.deleteById(carId1);
+        carRepository.deleteById(carId2);
+        rentalRepository.deleteById(rentalId1);
+        rentalRepository.deleteById(rentalId2);
+    }
 }

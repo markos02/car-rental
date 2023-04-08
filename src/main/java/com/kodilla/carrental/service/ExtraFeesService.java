@@ -16,7 +16,7 @@ public class ExtraFeesService {
         //todo
     }
 
-    public void fuelFee(Double overdue) {
+    public void fuelFee(Double fuelDifference) {
         //todo
     }
 }

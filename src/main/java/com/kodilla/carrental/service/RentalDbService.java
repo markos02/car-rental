@@ -47,21 +47,29 @@ public class RentalDbService {
         return rentalRepository.save(rental);
     }
 
-    public Rental returnCar(ReturnCarDto returnCarDto) throws RentalNotFoundException {
+    public void deleteRental(Integer rentalId) throws RentalNotFoundException {
+        if (rentalRepository.existsById(rentalId)) {
+            rentalRepository.deleteById(rentalId);
+        } else {
+            throw new RentalNotFoundException();
+        }
+    }
 
-        Rental rental = getRental(returnCarDto.getRentalId());
+    public Rental returnCar(Integer rentalId, LocalDate returnDate, Double fuelLevel) throws RentalNotFoundException {
 
-        List<Damage> newDamages = damageDbService.getRentalDamages(returnCarDto.getRentalId());
+        Rental rental = getRental(rentalId);
+
+        List<Damage> newDamages = damageDbService.getRentalDamages(rentalId);
         if (newDamages.size() != 0) {
             extraFeesService.newDamagesFee(newDamages);
         }
 
-        Long overdue = DAYS.between(returnCarDto.getReturnDate(),rental.getOrder().getDateTo());
+        Long overdue = DAYS.between(returnDate,rental.getOrder().getDateTo());
         if (overdue < 0) {
             extraFeesService.overdueFee(overdue);
         }
 
-        Double fuelDifference = returnCarDto.getFuelLevel() - rental.getOrder().getFuelLevel();
+        Double fuelDifference = fuelLevel - rental.getOrder().getFuelLevel();
         if (fuelDifference < 0) {
             extraFeesService.fuelFee(fuelDifference);
         }

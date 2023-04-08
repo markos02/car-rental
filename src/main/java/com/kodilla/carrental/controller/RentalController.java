@@ -58,7 +58,7 @@ public class RentalController {
 
     @PutMapping("/return")
     public ResponseEntity<RentalDto> returnCar(@RequestBody ReturnCarDto returnCarDto) throws RentalNotFoundException {
-        Rental completedRental = rentalDbService.returnCar(returnCarDto);
+        Rental completedRental = rentalDbService.returnCar(returnCarDto.getRentalId(), returnCarDto.getReturnDate(), returnCarDto.getFuelLevel());
         return ResponseEntity.ok(rentalMapper.mapToRentalDto(completedRental));
     }
 

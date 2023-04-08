@@ -207,11 +207,8 @@ class CarDbServiceTest {
         carDbService.saveCar(car2);
         int carId2 = car2.getCarId();
         rentalRepository.save(rental1);
-        int rentalId1 = rental1.getRentalId();
         rentalRepository.save(rental2);
-        int rentalId2 = rental2.getRentalId();
         rentalRepository.save(rental3);
-        int rentalId3 = rental3.getRentalId();
 
         //Then
         assertTrue(carDbService.checkIfAvailable(carId1, rental1DateFrom.minusDays(10), rental1DateFrom.minusDays(1)));
@@ -223,18 +220,6 @@ class CarDbServiceTest {
         assertFalse(carDbService.checkIfAvailable(carId2, rental2DateFrom, rental2DateTo));
         assertFalse(carDbService.checkIfAvailable(carId2, rental2DateFrom.minusDays(1), rental2DateTo.plusDays(1)));
         assertTrue(carDbService.checkIfAvailable(carId2, rental2DateTo.plusDays(1), rental2DateTo.plusDays(30)));
-
-        //CleanUp
-
-        try {
-            carDbService.deleteCar(carId1);
-            carDbService.deleteCar(carId2);
-            rentalRepository.deleteById(rentalId1);
-            rentalRepository.deleteById(rentalId2);
-            rentalRepository.deleteById(rentalId3);
-        } catch (Exception e) {
-            //do nothing
-        }
     }
 
     @Transactional
@@ -303,18 +288,6 @@ class CarDbServiceTest {
         assertEquals(1, availableCars4.size());
         assertTrue(availableCars4.contains(car1));
         assertEquals(2, availableCars5.size());
-
-        //CleanUp
-
-        try {
-            carDbService.deleteCar(carId1);
-            carDbService.deleteCar(carId2);
-            rentalRepository.deleteById(rentalId1);
-            rentalRepository.deleteById(rentalId2);
-            rentalRepository.deleteById(rentalId3);
-        } catch (Exception e) {
-            // do nothing
-        }
     }
 
     @Test
