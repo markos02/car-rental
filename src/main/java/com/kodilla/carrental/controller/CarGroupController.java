@@ -33,10 +33,10 @@ public class CarGroupController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createCarGroup(@RequestBody CarGroupDto carGroupDto) {
+    public ResponseEntity<CarGroupDto> createCarGroup(@RequestBody CarGroupDto carGroupDto) {
         CarGroup carGroup = carGroupMapper.mapToCarGroup(carGroupDto);
-        carGroupDbService.saveCarGroup(carGroup);
-        return ResponseEntity.ok().build();
+        CarGroup createdCarGroup = carGroupDbService.saveCarGroup(carGroup);
+        return ResponseEntity.ok(carGroupMapper.mapToCarGroupDto(createdCarGroup));
     }
 
     @PutMapping
@@ -52,7 +52,7 @@ public class CarGroupController {
         return ResponseEntity.ok(carMapper.mapToCarDtoList(cars));
     }
 
-    @GetMapping(value = "/{carGroupId},{dateFrom},{dateTo}")
+    @GetMapping(value = "/{carGroupId}/{dateFrom}/{dateTo}")
     public ResponseEntity<List<CarDto>> getAllAvailable(@PathVariable Integer carGroupId, @PathVariable LocalDate dateFrom, @PathVariable LocalDate dateTo) {
         List<Car> availableCars = carGroupDbService.getAllAvailableGroup(carGroupId, dateFrom, dateTo);
         return ResponseEntity.ok(carMapper.mapToCarDtoList(availableCars));

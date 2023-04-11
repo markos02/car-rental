@@ -29,16 +29,16 @@ public class CarController {
         return ResponseEntity.ok(carMapper.mapToCarDtoList(cars));
     }
 
-    @GetMapping(value = "/{carId}")
+    @GetMapping("/{carId}")
     public ResponseEntity<CarDto> getCar(@PathVariable Integer carId) throws CarNotFoundException {
         return ResponseEntity.ok(carMapper.mapToCarDto(carDbService.getCar(carId)));
     }
 
     @PostMapping
-    public ResponseEntity<Void> createCar(@RequestBody CreateCarDto createCarDto) throws CarGroupNotFoundException {
+    public ResponseEntity<CarDto> createCar(@RequestBody CreateCarDto createCarDto) throws CarGroupNotFoundException {
         Car car = carMapper.mapToCreateCar(createCarDto);
-        carDbService.createNewCar(car, createCarDto.getCarGroupId());
-        return ResponseEntity.ok().build();
+        Car createdCar = carDbService.createNewCar(car, createCarDto.getCarGroupId());
+        return ResponseEntity.ok(carMapper.mapToCarDto(createdCar));
     }
 
     @PutMapping
@@ -48,7 +48,7 @@ public class CarController {
         return ResponseEntity.ok(carMapper.mapToCarDto(savedCar));
     }
 
-    @GetMapping(value = "/{carId},{dateFrom},{dateTo}")
+    @GetMapping(value="/isAvailable/{carId}/{dateFrom}/{dateTo}")
     public ResponseEntity<Object> checkIfAvailable(@PathVariable Integer carId, @PathVariable LocalDate dateFrom, @PathVariable LocalDate dateTo) {
         if (carDbService.checkIfAvailable(carId, dateFrom, dateTo)) {
             return new ResponseEntity<>("Hurray! Car with given ID is available in given period", HttpStatus.OK);
@@ -57,9 +57,10 @@ public class CarController {
         }
     }
 
-    @GetMapping(value = "/{dateFrom},{dateTo}")
+    @GetMapping(value = "/allAvailable/{dateFrom}/{dateTo}")
     public ResponseEntity<List<CarDto>> getAllAvailable(@PathVariable LocalDate dateFrom, @PathVariable LocalDate dateTo) {
-        List<Car> availableCars = carDbService.getAllAvailable(dateFrom,dateTo);
+        System.out.println(dateFrom + " " + dateTo);
+        List<Car> availableCars = carDbService.getAllAvailable(dateFrom, dateTo);
         return ResponseEntity.ok(carMapper.mapToCarDtoList(availableCars));
     }
 }

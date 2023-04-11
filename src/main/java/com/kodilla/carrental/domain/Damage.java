@@ -21,6 +21,8 @@ public class Damage {
     @NotNull
     @Column(name = "DAMAGE_ID", unique = true)
     private Integer damageId;
+
+    @Column(name="DATE")
     private LocalDate date;
 
     @ManyToOne

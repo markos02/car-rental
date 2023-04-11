@@ -29,10 +29,10 @@ public class DamageController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createDamage(@RequestBody DamageDto damageDto) throws RentalNotFoundException, CarNotFoundException {
+    public ResponseEntity<DamageDto> createDamage(@RequestBody DamageDto damageDto) throws RentalNotFoundException, CarNotFoundException {
         Damage damage = damageMapper.mapToDamage(damageDto);
-        damageDbService.saveDamage(damage);
-        return ResponseEntity.ok().build();
+        Damage savedDamage = damageDbService.saveDamage(damage);
+        return ResponseEntity.ok(damageMapper.mapToDamageDto(savedDamage));
     }
 
     @DeleteMapping(value = "/{damageId}")
