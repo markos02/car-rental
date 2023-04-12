@@ -11,7 +11,7 @@ import java.util.List;
 public class RentalDto {
 
     private Integer rentalId;
-    private Integer orderID;
+    private Integer orderId;
     private List<Integer> damagesIds;
     private RentalStatus status;
 }

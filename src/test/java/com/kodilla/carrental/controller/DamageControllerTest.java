@@ -5,11 +5,7 @@ import com.kodilla.carrental.domain.Car;
 import com.kodilla.carrental.domain.Damage;
 import com.kodilla.carrental.domain.DamageDto;
 import com.kodilla.carrental.domain.Rental;
-import com.kodilla.carrental.exception.CarNotFoundException;
-import com.kodilla.carrental.exception.RentalNotFoundException;
-import com.kodilla.carrental.mapper.CarMapper;
 import com.kodilla.carrental.mapper.DamageMapper;
-import com.kodilla.carrental.service.CarDbService;
 import com.kodilla.carrental.service.DamageDbService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -22,14 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -81,22 +72,5 @@ class DamageControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].carId", Matchers.is(carId)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].rentalId", Matchers.is(24)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].description", Matchers.is("Flat tire")));
-    }
-
-    @Test
-    void testCreateDamage() throws Exception {
-        //Given
-        Damage damage = new Damage(1, LocalDate.of(2023, 04, 11), new Car(), new Rental(), "Broken lamp");
-        DamageDto damageDto = new DamageDto(1, LocalDate.of(2023, 04, 11), 20, 24, "Broken lamp");
-
-        when(damageMapper.mapToDamage(damageDto)).thenReturn(damage);
-        when(damageDbService.saveDamage(damage)).thenReturn(damage);
-        when(damageMapper.mapToDamageDto(damage)).thenReturn(damageDto);
-
-        Gson gson = new Gson();
-
-        //When
-        //Then
-
     }
 }
