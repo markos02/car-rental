@@ -1,7 +1,5 @@
 package com.kodilla.carrental.client;
 
-import com.kodilla.carrental.domain.CurrencyRateDto;
-import com.kodilla.carrental.domain.GasPriceDto;
 import com.kodilla.carrental.domain.GasPricesListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,8 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +20,6 @@ public class GasPriceClient {
 
     @Value("${gasprice.api.token}")
     private String gasPriceApiToken;
-
 
     public GasPricesListDto getGasPrices() {
         HttpHeaders headers = new HttpHeaders();

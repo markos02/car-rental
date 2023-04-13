@@ -10,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 public class NbpClient {
 
     private final RestTemplate restTemplate;
-
     private final String REQUEST = "http://api.nbp.pl/api/exchangerates/rates/a/eur/";
 
     public CurrencyRateDto getEuroExchangeRate() {

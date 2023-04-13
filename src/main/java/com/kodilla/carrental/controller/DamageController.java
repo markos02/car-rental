@@ -1,7 +1,5 @@
 package com.kodilla.carrental.controller;
 
-import com.kodilla.carrental.domain.CarGroup;
-import com.kodilla.carrental.domain.CarGroupDto;
 import com.kodilla.carrental.domain.Damage;
 import com.kodilla.carrental.domain.DamageDto;
 import com.kodilla.carrental.exception.CarNotFoundException;

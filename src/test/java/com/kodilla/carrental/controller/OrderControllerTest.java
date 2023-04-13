@@ -56,10 +56,35 @@ class OrderControllerTest {
                 new Order(2, new Client(), new Rental(), new Car(), from, to, OrderStatus.COMPLETED, false, false, false, 0.4)
         );
 
-        List<OrderDto> ordersDtos = List.of(
-                new OrderDto(1, 10, 11, 12, from, to, OrderStatus.IN_PROCESS, true, true, true, 0.5),
-                new OrderDto(2, 20, 21, 22, from, to, OrderStatus.COMPLETED, false, false, false, 0.4)
-        );
+        OrderDto orderDto1 = new OrderDto.OrderDtoBuilder()
+                .orderId(1)
+                .clientId(10)
+                .rentalId(11)
+                .carId(12)
+                .dateFrom(from)
+                .dateTo(to)
+                .status(OrderStatus.IN_PROCESS)
+                .childSeat(true)
+                .gps(true)
+                .extraDriver(true)
+                .fuelLevel(0.5)
+                .build();
+
+        OrderDto orderDto2 = new OrderDto.OrderDtoBuilder()
+                .orderId(2)
+                .clientId(20)
+                .rentalId(21)
+                .carId(22)
+                .dateFrom(from)
+                .dateTo(to)
+                .status(OrderStatus.COMPLETED)
+                .childSeat(false)
+                .gps(false)
+                .extraDriver(false)
+                .fuelLevel(0.4)
+                .build();
+
+        List<OrderDto> ordersDtos = List.of(orderDto1, orderDto2);
 
         when(orderDbService.getAllOrders()).thenReturn(orders);
         when(orderMapper.mapToOrderDtoList(orders)).thenReturn(ordersDtos);
@@ -105,7 +130,19 @@ class OrderControllerTest {
 
         Order order = new Order(orderId, new Client(), new Rental(), new Car(), from, to, OrderStatus.IN_PROCESS, true, true, true, 0.5);
 
-        OrderDto orderDto = new OrderDto(1, 10, 11, 12, from, to, OrderStatus.IN_PROCESS, true, true, true, 0.5);
+        OrderDto orderDto = new OrderDto.OrderDtoBuilder()
+                .orderId(1)
+                .clientId(10)
+                .rentalId(11)
+                .carId(12)
+                .dateFrom(from)
+                .dateTo(to)
+                .status(OrderStatus.IN_PROCESS)
+                .childSeat(true)
+                .gps(true)
+                .extraDriver(true)
+                .fuelLevel(0.5)
+                .build();
 
         when(orderDbService.getOrder(orderId)).thenReturn(order);
         when(orderMapper.mapToOrderDto(order)).thenReturn(orderDto);
@@ -135,7 +172,7 @@ class OrderControllerTest {
     void TestStartRental() throws Exception {
         //Given
         Integer orderId = 1;
-        Rental rental = new Rental(1, new Order(),new ArrayList<>(), RentalStatus.RENTED);
+        Rental rental = new Rental(1, new Order(), new ArrayList<>(), RentalStatus.RENTED);
         RentalDto rentalDto = new RentalDto(1, 2, new ArrayList<>(), RentalStatus.RENTED);
 
         when(orderDbService.startRental(orderId)).thenReturn(rental);

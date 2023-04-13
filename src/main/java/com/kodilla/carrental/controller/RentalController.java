@@ -61,5 +61,4 @@ public class RentalController {
         Rental completedRental = rentalDbService.returnCar(returnCarDto.getRentalId(), returnCarDto.getReturnDate(), returnCarDto.getFuelLevel());
         return ResponseEntity.ok(rentalMapper.mapToRentalDto(completedRental));
     }
-
 }
