@@ -3,6 +3,7 @@ package com.kodilla.carrental.controller;
 import com.kodilla.carrental.domain.*;
 import com.kodilla.carrental.exception.OrderNotFoundException;
 import com.kodilla.carrental.exception.RentalNotFoundException;
+import com.kodilla.carrental.mapper.FeeMapper;
 import com.kodilla.carrental.mapper.RentalMapper;
 import com.kodilla.carrental.service.RentalDbService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class RentalController {
 
     private final RentalMapper rentalMapper;
     private final RentalDbService rentalDbService;
+    private final FeeMapper feeMapper;
 
     @GetMapping
     public ResponseEntity<List<RentalDto>> getAllRentals() {
@@ -57,8 +59,8 @@ public class RentalController {
     }
 
     @PutMapping("/return")
-    public ResponseEntity<RentalDto> returnCar(@RequestBody ReturnCarDto returnCarDto) throws RentalNotFoundException {
-        Rental completedRental = rentalDbService.returnCar(returnCarDto.getRentalId(), returnCarDto.getReturnDate(), returnCarDto.getFuelLevel());
-        return ResponseEntity.ok(rentalMapper.mapToRentalDto(completedRental));
+    public ResponseEntity<List<FeeDto>> returnCar(@RequestBody ReturnCarDto returnCarDto) throws RentalNotFoundException {
+        List<Fee> fees = rentalDbService.returnCar(returnCarDto.getRentalId(), returnCarDto.getReturnDate(), returnCarDto.getFuelLevel());
+        return ResponseEntity.ok(feeMapper.mapToFeeDtoList(fees));
     }
 }

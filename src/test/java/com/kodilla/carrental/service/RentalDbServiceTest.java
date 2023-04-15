@@ -6,13 +6,10 @@ import com.kodilla.carrental.domain.enums.OrderStatus;
 import com.kodilla.carrental.domain.enums.RentalStatus;
 import com.kodilla.carrental.domain.enums.Transmission;
 import com.kodilla.carrental.exception.RentalNotFoundException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.hibernate.sql.ast.tree.expression.Over;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,7 +39,7 @@ class RentalDbServiceTest {
     DamageDbService damageDbService;
 
     @MockBean
-    private ExtraFeesService extraFeesService;
+    private ExtraFeeService extraFeeService;
 
     @Test
     void testGetAllRentals() throws RentalNotFoundException {
@@ -71,7 +68,7 @@ class RentalDbServiceTest {
     }
 
     @Test
-    void testGetAllRentalsNoRentals() throws RentalNotFoundException {
+    void testGetAllRentalsNoRentals() {
         //Given
         //When
         List<Rental> retrievedRentals = rentalDbService.getAllRentals();
@@ -258,24 +255,26 @@ class RentalDbServiceTest {
         order1.setRental(rental);
 
         //When
-        carDbService.saveCar(car1);;
+        carDbService.saveCar(car1);
         clientDbService.saveClient(client1);
 
         rentalDbService.saveRental(rental);
         Integer rentalId = rental.getRentalId();
         Double fuelLevel = 0.25;
 
-        rentalDbService.returnCar(rentalId, LocalDate.now(), fuelLevel);
+        List<Fee> fees = rentalDbService.returnCar(rentalId, LocalDate.now(), fuelLevel);
 
         Rental retrievedRental = rentalDbService.getRental(rentalId);
 
         //Then
+        assertNotNull(fees);
+        assertEquals(0, fees.size());
         assertNotNull(retrievedRental);
         assertEquals(rentalId, retrievedRental.getRentalId());
         assertEquals(RentalStatus.RETURNED, retrievedRental.getStatus());
-        verify(extraFeesService, never()).fuelFee(any());
-        verify(extraFeesService, never()).overdueFee(any());
-        verify(extraFeesService, never()).newDamagesFee(any());
+        verify(extraFeeService, never()).fuelFee(any());
+        verify(extraFeeService, never()).overdueFee(any());
+        verify(extraFeeService, never()).newDamagesFee(any());
     }
 
     @Test
@@ -308,6 +307,9 @@ class RentalDbServiceTest {
 
         order1.setRental(rental);
 
+        Fee fee = new Fee("Fuel fee", 120.0);
+        when(extraFeeService.fuelFee(0.15)).thenReturn(fee);
+
         //When
         carDbService.saveCar(car1);
         clientDbService.saveClient(client1);
@@ -316,17 +318,20 @@ class RentalDbServiceTest {
         Integer rentalId = rental.getRentalId();
         Double fuelLevel = 0.10;
 
-        rentalDbService.returnCar(rentalId, LocalDate.now(), fuelLevel);
+        List<Fee> fees = rentalDbService.returnCar(rentalId, LocalDate.now(), fuelLevel);
 
         Rental retrievedRental = rentalDbService.getRental(rentalId);
 
         //Then
+        assertEquals(1, fees.size());
+        assertEquals("Fuel fee", fees.get(0).getDescription());
+        assertEquals(120.0, fees.get(0).getValue());
         assertNotNull(retrievedRental);
         assertEquals(rentalId, retrievedRental.getRentalId());
         assertEquals(RentalStatus.RETURNED, retrievedRental.getStatus());
-        verify(extraFeesService, times(1)).fuelFee(any());
-        verify(extraFeesService, never()).overdueFee(any());
-        verify(extraFeesService, never()).newDamagesFee(any());
+        verify(extraFeeService, times(1)).fuelFee(any());
+        verify(extraFeeService, never()).overdueFee(any());
+        verify(extraFeeService, never()).newDamagesFee(any());
     }
 
     @Test
@@ -359,6 +364,9 @@ class RentalDbServiceTest {
 
         order1.setRental(rental);
 
+        Fee fee = new Fee("Overdue fee", 100.0);
+        when(extraFeeService.overdueFee(1L)).thenReturn(fee);
+
         //When
         carDbService.saveCar(car1);
         clientDbService.saveClient(client1);
@@ -367,17 +375,19 @@ class RentalDbServiceTest {
         Integer rentalId = rental.getRentalId();
         Double fuelLevel = 0.25;
 
-        rentalDbService.returnCar(rentalId, LocalDate.now(), fuelLevel);
-
+        List<Fee> fees = rentalDbService.returnCar(rentalId, LocalDate.now(), fuelLevel);
         Rental retrievedRental = rentalDbService.getRental(rentalId);
 
         //Then
+        assertEquals(1, fees.size());
+        assertEquals("Overdue fee", fees.get(0).getDescription());
+        assertEquals(100.0, fees.get(0).getValue());
         assertNotNull(retrievedRental);
         assertEquals(rentalId, retrievedRental.getRentalId());
         assertEquals(RentalStatus.RETURNED, retrievedRental.getStatus());
-        verify(extraFeesService, never()).fuelFee(any());
-        verify(extraFeesService, times(1)).overdueFee(any());
-        verify(extraFeesService, never()).newDamagesFee(any());
+        verify(extraFeeService, never()).fuelFee(any());
+        verify(extraFeeService, times(1)).overdueFee(any());
+        verify(extraFeeService, never()).newDamagesFee(any());
     }
 
     @Test
@@ -410,6 +420,9 @@ class RentalDbServiceTest {
 
         order1.setRental(rental);
 
+        Fee fee = new Fee("Damage fee", 500.0);
+        when(extraFeeService.newDamagesFee(any())).thenReturn(fee);
+
         //When
         carDbService.saveCar(car1);
         clientDbService.saveClient(client1);
@@ -424,17 +437,19 @@ class RentalDbServiceTest {
         Integer rentalId = rental.getRentalId();
         Double fuelLevel = 0.25;
 
-        rentalDbService.returnCar(rentalId, LocalDate.now(), fuelLevel);
-
+        List<Fee> fees = rentalDbService.returnCar(rentalId, LocalDate.now(), fuelLevel);
         Rental retrievedRental = rentalDbService.getRental(rentalId);
 
         //Then
+        assertEquals(1, fees.size());
+        assertEquals("Damage fee", fees.get(0).getDescription());
+        assertEquals(500.0, fees.get(0).getValue());
         assertNotNull(retrievedRental);
         assertEquals(rentalId, retrievedRental.getRentalId());
         assertEquals(RentalStatus.RETURNED, retrievedRental.getStatus());
-        verify(extraFeesService, never()).fuelFee(any());
-        verify(extraFeesService, never()).overdueFee(any());
-        verify(extraFeesService, times(1)).newDamagesFee(any());
+        verify(extraFeeService, never()).fuelFee(any());
+        verify(extraFeeService, never()).overdueFee(any());
+        verify(extraFeeService, times(1)).newDamagesFee(any());
     }
 
     @Test
@@ -467,6 +482,14 @@ class RentalDbServiceTest {
 
         order1.setRental(rental);
 
+        Fee FuelFee = new Fee("Fuel fee", 120.0);
+        Fee overdueFee = new Fee("Overdue fee", 100.0);
+        Fee damageFee = new Fee("Damage fee", 500.0);
+
+        when(extraFeeService.fuelFee(0.15)).thenReturn(FuelFee);
+        when(extraFeeService.overdueFee(1L)).thenReturn(overdueFee);
+        when(extraFeeService.newDamagesFee(any())).thenReturn(damageFee);
+
         //When
         carDbService.saveCar(car1);
         clientDbService.saveClient(client1);
@@ -479,18 +502,24 @@ class RentalDbServiceTest {
         damageDbService.saveDamage(damage);
 
         Integer rentalId = rental.getRentalId();
-        Double fuelLevel = 0.24;
+        Double fuelLevel = 0.1;
 
-        rentalDbService.returnCar(rentalId, LocalDate.now(), fuelLevel);
-
+        List<Fee> fees = rentalDbService.returnCar(rentalId, LocalDate.now(), fuelLevel);
         Rental retrievedRental = rentalDbService.getRental(rentalId);
 
         //Then
+        assertEquals(3, fees.size());
+        assertEquals("Damage fee", fees.get(0).getDescription());
+        assertEquals(500.0, fees.get(0).getValue());
+        assertEquals("Overdue fee", fees.get(1).getDescription());
+        assertEquals(100.0, fees.get(1).getValue());
+        assertEquals("Fuel fee", fees.get(2).getDescription());
+        assertEquals(120.0, fees.get(2).getValue());
         assertNotNull(retrievedRental);
         assertEquals(rentalId, retrievedRental.getRentalId());
         assertEquals(RentalStatus.RETURNED, retrievedRental.getStatus());
-        verify(extraFeesService, times(1)).fuelFee(any());
-        verify(extraFeesService, times(1)).overdueFee(any());
-        verify(extraFeesService, times(1)).newDamagesFee(any());
+        verify(extraFeeService, times(1)).fuelFee(any());
+        verify(extraFeeService, times(1)).overdueFee(any());
+        verify(extraFeeService, times(1)).newDamagesFee(any());
     }
 }

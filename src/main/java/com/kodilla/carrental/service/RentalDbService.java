@@ -1,8 +1,9 @@
 package com.kodilla.carrental.service;
 
-import com.kodilla.carrental.domain.Damage;
-import com.kodilla.carrental.domain.Rental;
-import com.kodilla.carrental.domain.ReturnCarDto;
+
+import com.kodilla.carrental.client.GasPriceClient;
+import com.kodilla.carrental.client.NbpClient;
+import com.kodilla.carrental.domain.*;
 import com.kodilla.carrental.domain.enums.RentalStatus;
 import com.kodilla.carrental.exception.RentalNotFoundException;
 import com.kodilla.carrental.repository.RentalRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +23,7 @@ public class RentalDbService {
 
     private final RentalRepository rentalRepository;
     private final DamageDbService damageDbService;
-    private final ExtraFeesService extraFeesService;
+    private final ExtraFeeService extraFeeService;
 
     public List<Rental> getAllRentals() {
         return rentalRepository.findAll();
@@ -55,27 +57,28 @@ public class RentalDbService {
         }
     }
 
-    public Rental returnCar(Integer rentalId, LocalDate returnDate, Double fuelLevel) throws RentalNotFoundException {
+    public List<Fee> returnCar(Integer rentalId, LocalDate returnDate, Double fuelLevel) throws RentalNotFoundException {
 
+        List<Fee> fees = new ArrayList<>();
         Rental rental = getRental(rentalId);
 
         List<Damage> newDamages = damageDbService.getRentalDamages(rentalId);
         if (newDamages.size() != 0) {
-            extraFeesService.newDamagesFee(newDamages);
+            fees.add(extraFeeService.newDamagesFee(newDamages));
         }
 
-        Long overdue = DAYS.between(returnDate,rental.getOrder().getDateTo());
-        if (overdue < 0) {
-            extraFeesService.overdueFee(overdue);
+        Long overdue = DAYS.between(rental.getOrder().getDateTo(), returnDate);
+        if (overdue > 0) {
+            fees.add(extraFeeService.overdueFee(overdue));
         }
 
-        Double fuelDifference = fuelLevel - rental.getOrder().getFuelLevel();
-        if (fuelDifference < 0) {
-            extraFeesService.fuelFee(fuelDifference);
+        Double fuelDifference = rental.getOrder().getFuelLevel() - fuelLevel;
+        if (fuelDifference > 0) {
+            fees.add(extraFeeService.fuelFee(fuelDifference));
         }
 
         rental.setStatus(RentalStatus.RETURNED);
 
-        return saveRental(rental);
+        return fees;
     }
 }
