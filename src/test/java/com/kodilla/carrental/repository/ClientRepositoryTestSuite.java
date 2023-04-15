@@ -1,10 +1,8 @@
 package com.kodilla.carrental.repository;
 
-import com.kodilla.carrental.domain.CarGroup;
 import com.kodilla.carrental.domain.Client;
 import com.kodilla.carrental.domain.Order;
 import jakarta.transaction.Transactional;
-import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -93,7 +93,7 @@ class DamageDbServiceTest {
 
     @Test
     @Transactional
-    void testGetRentalDamages() throws CarNotFoundException, RentalNotFoundException {
+    void testGetRentalDamages() {
         //Given
         String description = "Description of test damage";
         Car car1 = new Car("ABC 1234", FuelType.GASOLINE, Transmission.AUTOMATIC, "Test model 1");
@@ -118,7 +118,6 @@ class DamageDbServiceTest {
         damage1.setRental(rental1);
         damage2.setRental(rental1);
 
-
         //When
         carDbService.saveCar(car1);
         carDbService.saveCar(car2);
@@ -142,12 +141,10 @@ class DamageDbServiceTest {
         try {
             carDbService.deleteCar(carId1);
             carDbService.deleteCar(carId2);
-
             rentalDbService.deleteRental(rentalId1);
             rentalDbService.deleteRental(rentalId2);
         } catch (Exception e) {
             //do nothing
         }
     }
-
 }

@@ -60,15 +60,12 @@ class CarDbServiceTest {
     @Test
     void testGetAllCarsNoCars() {
         //Given
-
         //When
         List<Car> retrievedCars = carDbService.getAllCars();
 
         //Then
         assertNotNull(retrievedCars);
         assertEquals(0, retrievedCars.size());
-
-        //CleanUp
     }
 
     @Test
@@ -165,7 +162,7 @@ class CarDbServiceTest {
 
     @Transactional
     @Test
-    void testCheckIfAvailable() throws CarNotFoundException {
+    void testCheckIfAvailable() {
         //Given
         LocalDate rental1DateFrom = LocalDate.of(2023, 2, 5);
         LocalDate rental1DateTo = LocalDate.of(2023, 2, 12);
@@ -224,7 +221,7 @@ class CarDbServiceTest {
 
     @Transactional
     @Test
-    void testGetAllAvailable() throws CarNotFoundException {
+    void testGetAllAvailable() {
         //Given
         LocalDate rental1DateFrom = LocalDate.of(2023, 2, 5);
         LocalDate rental1DateTo = LocalDate.of(2023, 2, 12);
@@ -302,7 +299,5 @@ class CarDbServiceTest {
         //Then
         assertDoesNotThrow(() -> carDbService.deleteCar(carId1));
         assertThrows(CarNotFoundException.class, () -> carDbService.deleteCar(carId1 - 1));
-
-        //CleanUp
     }
 }

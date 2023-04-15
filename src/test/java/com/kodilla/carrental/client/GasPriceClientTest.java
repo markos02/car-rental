@@ -1,13 +1,8 @@
 package com.kodilla.carrental.client;
 
-import com.kodilla.carrental.domain.GasPriceDto;
-import com.kodilla.carrental.domain.GasPricesListDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

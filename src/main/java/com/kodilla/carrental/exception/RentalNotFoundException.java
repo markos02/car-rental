@@ -1,4 +1,4 @@
 package com.kodilla.carrental.exception;
 
-public class RentalNotFoundException extends Exception{
+public class RentalNotFoundException extends Exception {
 }

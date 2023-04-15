@@ -14,10 +14,8 @@ import java.util.Arrays;
 public class GasPriceClient {
 
     private final RestTemplate restTemplate;
-
     @Value("${gasprice.api.endpoint}")
     private String gasPriceApiEndpoint;
-
     @Value("${gasprice.api.token}")
     private String gasPriceApiToken;
 

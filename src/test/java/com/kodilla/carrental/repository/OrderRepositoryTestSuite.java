@@ -108,7 +108,8 @@ public class OrderRepositoryTestSuite {
         rental.setOrder(order);
 
         rentalRepository.save(rental);
-        int rentalId = rental.getRentalId();;
+        int rentalId = rental.getRentalId();
+        ;
 
         order.setRental(rental);
 

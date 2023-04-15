@@ -1,6 +1,5 @@
 package com.kodilla.carrental.controller;
 
-import com.google.gson.*;
 import com.kodilla.carrental.domain.Car;
 import com.kodilla.carrental.domain.Damage;
 import com.kodilla.carrental.domain.DamageDto;

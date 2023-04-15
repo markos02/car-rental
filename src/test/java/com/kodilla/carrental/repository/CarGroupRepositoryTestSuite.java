@@ -124,9 +124,9 @@ public class CarGroupRepositoryTestSuite {
         carGroupRepository.deleteById(id);
 
         //Then
-        assertEquals(car1Id,readCars.get(0).getCarId());
-        assertEquals(car2Id,readCars.get(1).getCarId());
-        assertEquals(car3Id,readCars.get(2).getCarId());
+        assertEquals(car1Id, readCars.get(0).getCarId());
+        assertEquals(car2Id, readCars.get(1).getCarId());
+        assertEquals(car3Id, readCars.get(2).getCarId());
         assertFalse(carRepository.existsById(car1Id));
         assertFalse(carRepository.existsById(car2Id));
         assertFalse(carRepository.existsById(car3Id));

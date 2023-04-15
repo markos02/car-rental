@@ -34,5 +34,4 @@ public class SimpleEmailService {
         mailMessage.setText(mail.getMessage());
         return mailMessage;
     }
-
 }

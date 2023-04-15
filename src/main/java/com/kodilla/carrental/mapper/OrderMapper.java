@@ -41,7 +41,7 @@ public class OrderMapper {
         );
     }
 
-    public OrderDto mapToOrderDto (Order order) {
+    public OrderDto mapToOrderDto(Order order) {
         return new OrderDto(
                 order.getOrderId(),
                 order.getClient().getClientId(),
@@ -57,7 +57,7 @@ public class OrderMapper {
         );
     }
 
-    public List<OrderDto> mapToOrderDtoList (List<Order> orderList) {
+    public List<OrderDto> mapToOrderDtoList(List<Order> orderList) {
         return orderList.stream()
                 .map(this::mapToOrderDto)
                 .collect(Collectors.toList());

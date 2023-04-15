@@ -1,13 +1,8 @@
 package com.kodilla.carrental.controller;
 
-
-import com.google.gson.Gson;
 import com.kodilla.carrental.domain.*;
 import com.kodilla.carrental.domain.enums.OrderStatus;
 import com.kodilla.carrental.domain.enums.RentalStatus;
-import com.kodilla.carrental.exception.CarNotFoundException;
-import com.kodilla.carrental.exception.ClientNotFoundException;
-import com.kodilla.carrental.exception.OrderNotFoundException;
 import com.kodilla.carrental.mapper.OrderMapper;
 import com.kodilla.carrental.mapper.RentalMapper;
 import com.kodilla.carrental.service.OrderDbService;
@@ -26,7 +21,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -166,7 +160,6 @@ class OrderControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.extraDriver", Matchers.is(true)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fuelLevel", Matchers.is(0.5)));
     }
-
 
     @Test
     void TestStartRental() throws Exception {

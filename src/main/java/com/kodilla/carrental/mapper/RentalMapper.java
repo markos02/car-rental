@@ -17,7 +17,7 @@ public class RentalMapper {
     private final OrderRepository orderRepository;
     private final DamageRepository damageRepository;
 
-    public Rental mapToRental (RentalDto rentalDto) throws OrderNotFoundException {
+    public Rental mapToRental(RentalDto rentalDto) throws OrderNotFoundException {
 
         Order order = orderRepository.findById(rentalDto.getOrderId()).orElseThrow(OrderNotFoundException::new);
         List<Damage> damages = rentalDto.getDamagesIds().stream()
@@ -32,7 +32,7 @@ public class RentalMapper {
         );
     }
 
-    public RentalDto mapToRentalDto (Rental rental) {
+    public RentalDto mapToRentalDto(Rental rental) {
 
         List<Integer> damagesIds = rental.getDamages().stream()
                 .map(Damage::getDamageId)

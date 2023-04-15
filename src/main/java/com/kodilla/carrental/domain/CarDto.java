@@ -19,5 +19,4 @@ public class CarDto {
     private FuelType fuelType;
     private Transmission transmission;
     private String model;
-
 }

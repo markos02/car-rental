@@ -19,7 +19,6 @@ public class CarMapper {
     private final DamageRepository damageRepository;
     private final OrderRepository orderRepository;
 
-
     public Car mapToCar(CarDto carDto) throws CarGroupNotFoundException {
 
         List<Damage> damages = carDto.getDamagesIds().stream()

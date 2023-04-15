@@ -59,7 +59,6 @@ public class CarController {
 
     @GetMapping(value = "/allAvailable/{dateFrom}/{dateTo}")
     public ResponseEntity<List<CarDto>> getAllAvailable(@PathVariable LocalDate dateFrom, @PathVariable LocalDate dateTo) {
-        System.out.println(dateFrom + " " + dateTo);
         List<Car> availableCars = carDbService.getAllAvailable(dateFrom, dateTo);
         return ResponseEntity.ok(carMapper.mapToCarDtoList(availableCars));
     }

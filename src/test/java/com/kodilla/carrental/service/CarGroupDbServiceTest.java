@@ -236,6 +236,6 @@ class CarGroupDbServiceTest {
         assertDoesNotThrow(() -> carGroupDbService.deleteCarGroup(carGroupId2));
         assertThrows(CarGroupNotFoundException.class, () -> carGroupDbService.deleteCarGroup(carGroupId1));
         assertNotNull(carId1);
-        assertThrows(CarNotFoundException.class, ()-> carDbService.getCar(carId1));
+        assertThrows(CarNotFoundException.class, () -> carDbService.getCar(carId1));
     }
 }

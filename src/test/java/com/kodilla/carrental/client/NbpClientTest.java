@@ -25,6 +25,6 @@ class NbpClientTest {
 
         //Then
         assertNotNull(currentRate);
-        assertNotEquals(0.0,currentRate);
+        assertNotEquals(0.0, currentRate);
     }
 }

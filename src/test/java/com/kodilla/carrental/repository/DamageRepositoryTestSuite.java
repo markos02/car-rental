@@ -155,8 +155,8 @@ public class DamageRepositoryTestSuite {
         List<Damage> damageList2 = damageRepository.findDamagesByCar_CarId(carId2);
 
         //Then
-        assertEquals(2,damageList1.size());
-        assertEquals(0,damageList2.size());
+        assertEquals(2, damageList1.size());
+        assertEquals(0, damageList2.size());
 
         //CleanUp
         carRepository.deleteById(carId1);
@@ -210,8 +210,8 @@ public class DamageRepositoryTestSuite {
         //Then
         assertNotNull(damageList1);
         assertNotNull(damageList2);
-        assertEquals(2,damageList1.size());
-        assertEquals(0,damageList2.size());
+        assertEquals(2, damageList1.size());
+        assertEquals(0, damageList2.size());
 
         //CleanUp
         carRepository.deleteById(carId1);

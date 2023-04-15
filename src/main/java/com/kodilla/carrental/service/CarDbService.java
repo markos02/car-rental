@@ -51,7 +51,7 @@ public class CarDbService {
     }
 
     public List<Car> getAllAvailable(LocalDate dateFrom, LocalDate dateTo) {
-        Set<Car> rentedCars = rentalRepository.retrieveRentalsBetweenDates(dateFrom,dateTo).stream()
+        Set<Car> rentedCars = rentalRepository.retrieveRentalsBetweenDates(dateFrom, dateTo).stream()
                 .map(rental -> rental.getOrder().getCar())
                 .collect(Collectors.toSet());
 
