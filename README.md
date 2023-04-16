@@ -29,7 +29,7 @@ Program posiada funkcję cyklicznego wysyłania maila informującego o niezwróc
 #### Wzorce projektowe
 - Builder
 
-#### Warstwa widuku
+#### Warstwa widoku
 Frontend aplikacji (zbudowany z wykorzystaniem biblioteki Vaadin) znajduje się w repozytorium GitHub pod tym linkiem:
 https://github.com/markos02/car-rental-frontend
 
